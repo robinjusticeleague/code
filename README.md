@@ -1,6 +1,7 @@
 # Zed
 
 Testing windows build!
+Why github actions is not working?
 
 ```bash
 cargo build --target x86_64-pc-windows-gnu
