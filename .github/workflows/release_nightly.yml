@@ -56,6 +56,9 @@ jobs:
         with:
           clean: false
 
+      - name: Enable long paths
+        run: git config --system core.longpaths true
+
       - name: Configure CI
         run: |
           New-Item -ItemType Directory -Path "./../.cargo" -Force
@@ -248,6 +251,9 @@ jobs:
         with:
           clean: false
 
+      - name: Enable long paths
+        run: git config --system core.longpaths true
+
       - name: Set release channel to nightly
         working-directory: ${{ env.ZED_WORKSPACE }}
         run: |
@@ -302,3 +308,4 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           environment: production
+
