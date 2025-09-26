@@ -1,12 +1,9 @@
-name: Release Nightly
+name: CI on Dev Branch
 
 on:
-  schedule:
-    # Fire every day at 7:00am UTC (Roughly before EU workday and after US workday)
-    - cron: "0 7 * * *"
   push:
-    tags:
-      - "nightly"
+    branches:
+      - dev
 
 env:
   CARGO_TERM_COLOR: always
@@ -212,14 +209,13 @@ jobs:
         id: freebsd-build
         uses: vmactions/freebsd-vm@c3ae29a132c8ef1924775414107a97cac042aad5 # v1.2.0
         with:
-          # envs: "MYTOKEN MYTOKEN2"
           usesh: true
           release: 13.5
           copyback: true
           prepare: |
             pkg install -y \
               bash curl jq git \
-              rustup-init cmake-core llvm-devel-lite pkgconf protobuf # ibx11 alsa-lib rust-bindgen-cli
+              rustup-init cmake-core llvm-devel-lite pkgconf protobuf
           run: |
             freebsd-version
             sysctl hw.model
