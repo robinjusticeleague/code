@@ -18,7 +18,6 @@ jobs:
   style:
     timeout-minutes: 60
     name: Check formatting and Clippy lints
-    if: github.repository_owner == 'zed-industries'
     runs-on:
       - self-hosted
       - macOS
@@ -38,7 +37,6 @@ jobs:
   tests:
     timeout-minutes: 60
     name: Run tests
-    if: github.repository_owner == 'zed-industries'
     runs-on:
       - self-hosted
       - macOS
@@ -55,7 +53,6 @@ jobs:
   windows-tests:
     timeout-minutes: 60
     name: Run tests on Windows
-    if: github.repository_owner == 'zed-industries'
     runs-on: [self-32vcpu-windows-2022]
     steps:
       - name: Checkout repo
@@ -81,7 +78,6 @@ jobs:
   bundle-mac:
     timeout-minutes: 60
     name: Create a macOS bundle
-    if: github.repository_owner == 'zed-industries'
     runs-on:
       - self-mini-macos
     needs: tests
@@ -123,7 +119,6 @@ jobs:
   bundle-linux-x86:
     timeout-minutes: 60
     name: Create a Linux *.tar.gz bundle for x86
-    if: github.repository_owner == 'zed-industries'
     runs-on:
       - namespace-profile-16x32-ubuntu-2004 # ubuntu 20.04 for minimal glibc
     needs: tests
@@ -163,7 +158,6 @@ jobs:
   bundle-linux-arm:
     timeout-minutes: 60
     name: Create a Linux *.tar.gz bundle for ARM
-    if: github.repository_owner == 'zed-industries'
     runs-on:
       - namespace-profile-8x32-ubuntu-2004-arm-m4 # ubuntu 20.04 for minimal glibc
     needs: tests
@@ -243,7 +237,6 @@ jobs:
   bundle-windows-x64:
     timeout-minutes: 60
     name: Create a Windows installer
-    if: github.repository_owner == 'zed-industries'
     runs-on: [self-32vcpu-windows-2022]
     needs: windows-tests
     env:
@@ -285,7 +278,6 @@ jobs:
 
   update-nightly-tag:
     name: Update nightly tag
-    if: github.repository_owner == 'zed-industries'
     runs-on: namespace-profile-2x4-ubuntu-2404
     needs:
       - bundle-mac
@@ -317,3 +309,4 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           environment: production
+
