@@ -18,9 +18,7 @@ jobs:
   style:
     timeout-minutes: 60
     name: Check formatting and Clippy lints
-    runs-on:
-      - self-hosted
-      - macOS
+    runs-on: macos-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -37,9 +35,7 @@ jobs:
   tests:
     timeout-minutes: 60
     name: Run tests
-    runs-on:
-      - self-hosted
-      - macOS
+    runs-on: macos-latest
     needs: style
     steps:
       - name: Checkout repo
@@ -53,7 +49,7 @@ jobs:
   windows-tests:
     timeout-minutes: 60
     name: Run tests on Windows
-    runs-on: [self-32vcpu-windows-2022]
+    runs-on: windows-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -78,8 +74,7 @@ jobs:
   bundle-mac:
     timeout-minutes: 60
     name: Create a macOS bundle
-    runs-on:
-      - self-mini-macos
+    runs-on: macos-latest
     needs: tests
     env:
       MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
@@ -108,7 +103,7 @@ jobs:
       - name: Setup Sentry CLI
         uses: matbour/setup-sentry-cli@3e938c54b3018bdd019973689ef984e033b0454b #v2
         with:
-          token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
+          token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Create macOS app bundle
         run: script/bundle-mac
@@ -119,8 +114,7 @@ jobs:
   bundle-linux-x86:
     timeout-minutes: 60
     name: Create a Linux *.tar.gz bundle for x86
-    runs-on:
-      - namespace-profile-16x32-ubuntu-2004 # ubuntu 20.04 for minimal glibc
+    runs-on: ubuntu-latest
     needs: tests
     steps:
       - name: Checkout repo
@@ -137,7 +131,7 @@ jobs:
       - name: Setup Sentry CLI
         uses: matbour/setup-sentry-cli@3e938c54b3018bdd019973689ef984e033b0454b #v2
         with:
-          token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
+          token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Limit target directory size
         run: script/clear-target-dir-if-larger-than 100
@@ -158,8 +152,7 @@ jobs:
   bundle-linux-arm:
     timeout-minutes: 60
     name: Create a Linux *.tar.gz bundle for ARM
-    runs-on:
-      - namespace-profile-8x32-ubuntu-2004-arm-m4 # ubuntu 20.04 for minimal glibc
+    runs-on: ubuntu-latest
     needs: tests
     steps:
       - name: Checkout repo
@@ -173,7 +166,7 @@ jobs:
       - name: Setup Sentry CLI
         uses: matbour/setup-sentry-cli@3e938c54b3018bdd019973689ef984e033b0454b #v2
         with:
-          token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
+          token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Limit target directory size
         run: script/clear-target-dir-if-larger-than 100
@@ -194,7 +187,7 @@ jobs:
   freebsd:
     timeout-minutes: 60
     if: false && github.repository_owner == 'zed-industries'
-    runs-on: github-8vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     needs: tests
     name: Build Zed on FreeBSD
     steps:
@@ -237,7 +230,7 @@ jobs:
   bundle-windows-x64:
     timeout-minutes: 60
     name: Create a Windows installer
-    runs-on: [self-32vcpu-windows-2022]
+    runs-on: windows-latest
     needs: windows-tests
     env:
       AZURE_TENANT_ID: ${{ secrets.AZURE_SIGNING_TENANT_ID }}
@@ -266,7 +259,7 @@ jobs:
       - name: Setup Sentry CLI
         uses: matbour/setup-sentry-cli@3e938c54b3018bdd019973689ef984e033b0454b #v2
         with:
-          token: ${{ SECRETS.SENTRY_AUTH_TOKEN }}
+          token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Build Zed installer
         working-directory: ${{ env.ZED_WORKSPACE }}
@@ -278,7 +271,7 @@ jobs:
 
   update-nightly-tag:
     name: Update nightly tag
-    runs-on: namespace-profile-2x4-ubuntu-2404
+    runs-on: ubuntu-latest
     needs:
       - bundle-mac
       - bundle-linux-x86
@@ -309,4 +302,3 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           environment: production
-
