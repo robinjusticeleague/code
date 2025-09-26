@@ -249,7 +249,7 @@ jobs:
   #   uses: ./.github/workflows/nix.yml
 
   bundle-windows-x64:
-    timeout-minutes: 60
+    timeout-minutes: 360
     name: Create a Windows installer
     runs-on: windows-latest
     # needs: windows-tests
@@ -284,6 +284,9 @@ jobs:
         uses: matbour/setup-sentry-cli@3e938c54b3018bdd019973689ef984e033b0454b #v2
         with:
           token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      - name: Install cargo-about
+        run: cargo install cargo-about
 
       - name: Build Zed installer
         working-directory: ${{ env.ZED_WORKSPACE }}
