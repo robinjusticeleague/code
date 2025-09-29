@@ -7,6 +7,45 @@ echo "nightly" > crates/zed/RELEASE_CHANNEL
 ./script/bundle-linux
 ```
 
+```bash
+git config --system core.longpaths true
+
+sudo apt-get update
+sudo apt-get install -y wget software-properties-common
+
+sudo apt-get update
+sudo apt-get install -y mingw-w64 powershell
+
+sudo apt-get update
+sudo apt-get install -y mingw-w64
+
+rustup target add x86_64-pc-windows-gnu
+
+cargo build --target x86_64-pc-windows-gnu --release --package zed --package cli
+
+pwsh script/bundle-windows.ps1
+
+export CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc
+export CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++
+
+echo 'export CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc' >> ~/.bashrc
+echo 'export CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++' >> ~/.bashrc
+source ~/.bashrc
+
+echo "nightly" > crates/zed/RELEASE_CHANNEL
+
+cargo install cargo-about
+
+cargo build --target x86_64-pc-windows-gnu --release --package zed --package cli
+
+sudo apt-get update
+sudo apt-get install -y spirv-tools
+
+wget https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.7.2212/dxc_2022_12_08.zip
+unzip dxc_2022_12_08.zip -d dxc
+export PATH=$PATH:/workspace/code/dxc/bin
+```
+
 [![Zed](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/zed-industries/zed/main/assets/badge/v0.json)](https://zed.dev)
 [![CI](https://github.com/zed-industries/zed/actions/workflows/ci.yml/badge.svg)](https://github.com/zed-industries/zed/actions/workflows/ci.yml)
 
